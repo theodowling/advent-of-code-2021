@@ -30,6 +30,26 @@ defmodule AdventOfCode.Input do
   end
 
   @doc """
+  Retrieves the specified input for your account and streams it through. Similar to get!/2
+  """
+
+  def stream!(day, year \\ nil)
+  def stream!(day, nil), do: stream!(day, default_year())
+
+  def stream!(day, year) do
+    cond do
+      in_cache?(day, year) ->
+        stream_fron_cache!(day, year)
+
+      allow_network?() ->
+        download!(day, year, true)
+
+      true ->
+        raise "Cache miss for day #{day} of year #{year} and `:allow_network?` is not `true`"
+    end
+  end
+
+  @doc """
   If, somehow, your input is invalid or mangled and you want to delete it from
   your cache so you can re-fetch it, this will save your bacon.
   Please don't use this to retrieve the input from the server repeatedly!
@@ -49,7 +69,7 @@ defmodule AdventOfCode.Input do
 
   defp from_cache!(day, year), do: File.read!(cache_path(day, year))
 
-  defp download!(day, year) do
+  defp download!(day, year, stream \\ false) do
     {:ok, {{'HTTP/1.1', 200, 'OK'}, _, input}} =
       :httpc.request(
         :get,
@@ -60,8 +80,11 @@ defmodule AdventOfCode.Input do
 
     store_in_cache!(day, year, input)
 
-    to_string(input)
+    if stream, do: stream_fron_cache!(day, year), else: to_string(input)
   end
+
+  defp stream_fron_cache!(day, year),
+    do: File.stream!(cache_path(day, year)) |> Stream.map(&String.trim/1)
 
   defp cache_dir do
     config()

@@ -17,22 +17,20 @@ defmodule AdventOfCode.Day01 do
       7
   """
   def part1(args) do
-    {count, _} =
-      args
-      |> String.split("\n", trim: true)
-      |> Enum.map(&String.to_integer(&1))
-      |> Enum.reduce({0, 9999}, fn n, {acc, prev} ->
-        acc =
-          if n > prev do
-            acc + 1
-          else
-            acc
-          end
+    args
+    |> String.split("\n", trim: true)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.reduce({0, 9999}, fn n, {acc, prev} ->
+      acc =
+        if n > prev do
+          acc + 1
+        else
+          acc
+        end
 
-        {acc, n}
-      end)
-
-    count
+      {acc, n}
+    end)
+    |> elem(0)
   end
 
   @doc """
@@ -53,18 +51,20 @@ defmodule AdventOfCode.Day01 do
   """
 
   def part2(args) do
-    [a, b, c | rest] =
+    inputs =
       args
       |> String.split("\n", trim: true)
       |> Enum.map(&String.to_integer(&1))
 
-    Enum.reduce(rest, {{a, b, c}, 0}, fn n, {{a, b, c}, acc} ->
-      if a + b + c < b + c + n do
-        {{b, c, n}, acc + 1}
-      else
-        {{b, c, n}, acc}
-      end
-    end)
-    |> elem(1)
+    count_increments(inputs, 0)
   end
+
+  defp count_increments([a, b, c, d | rest], n)
+       when a + b + c < b + c + d,
+       do: count_increments([b, c, d | rest], n + 1)
+
+  defp count_increments([_a, b, c, d | rest], n),
+    do: count_increments([b, c, d | rest], n)
+
+  defp count_increments(_, n), do: n
 end
