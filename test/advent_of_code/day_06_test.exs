@@ -3,19 +3,20 @@ defmodule AdventOfCode.Day06Test do
 
   import AdventOfCode.Day06
 
-  @tag :skip
+  # @tag :skip
   test "part1" do
-    input = nil
-    result = part1(input)
+    input = "3,4,3,1,2"
+    assert count_fish_at_day([3, 4, 3, 1, 2], 18) == 26
 
-    assert result
+    result = part1(input)
+    assert result == 5934
   end
 
-  @tag :skip
+  # @tag :skip
   test "part2" do
-    input = nil
+    input = "3,4,3,1,2"
     result = part2(input)
 
-    assert result
+    assert result == 26_984_457_539
   end
 end
