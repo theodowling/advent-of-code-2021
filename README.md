@@ -2,6 +2,19 @@
 
 A batteries included starter pack for participating in [Advent of Code](https://www.adventofcode.com) using Elixir!
 
+## Benchmark results on M1 Macbook Air
+
+```
+Name             ips        average  deviation         median         99th %
+day_01_pt_1   3.73 K      268.41 μs    ±29.10%         255 μs         457 μs
+day_01_pt_2   3.39 K      294.62 μs   ±102.76%         276 μs         546 μs
+day_02        3.30 K      303.37 μs     ±9.59%      297.99 μs      406.37 μs
+day_03        1.90 K      525.68 μs    ±14.67%         507 μs      816.88 μs
+day_04         53.71       18.62 ms     ±2.99%       18.64 ms       19.89 ms
+day_05         11.10       90.05 ms     ±8.28%       88.04 ms      107.81 ms
+day_06        1.01 K      989.79 μs    ±57.86%      955.99 μs     1668.99 μs
+```
+
 ## Usage
 
 There are 25 modules, 25 tests, and 50 mix tasks.
