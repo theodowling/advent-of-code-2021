@@ -1,6 +1,6 @@
-# Advent of Code Elixir Starter
+# Advent of Code 2021
 
-A batteries included starter pack for participating in [Advent of Code](https://www.adventofcode.com) using Elixir!
+This include my attempts at solving the advent of code problems for 2021.
 
 ## Benchmark results on M1 Macbook Air
 
@@ -14,6 +14,13 @@ day_04         53.71       18.62 ms     ±2.99%       18.64 ms       19.89 ms
 day_05         11.10       90.05 ms     ±8.28%       88.04 ms      107.81 ms
 day_06        1.01 K      989.79 μs    ±57.86%      955.99 μs     1668.99 μs
 day_07         12.08       82.81 ms     ±6.11%       84.06 ms       91.78 ms
+
+
+```
+
+## Generated using Advent of Code Elixir Starter kit
+
+A batteries included starter pack for participating in [Advent of Code](https://www.adventofcode.com) using Elixir!
 
 ## Usage
 
