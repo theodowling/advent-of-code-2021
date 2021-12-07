@@ -36,37 +36,33 @@ defmodule AdventOfCode.Day06 do
     |> String.replace("\n", "")
     |> String.split(",", trim: true)
     |> Enum.map(&String.to_integer/1)
-    |> create_spawn_cycle(%{})
-    |> recurse_through_days(Enum.to_list(-7..256))
+    |> create_spawn_cycle()
+    |> recurse_through_days(256)
     |> Map.values()
     |> Enum.sum()
+  end
+
+  defp create_spawn_cycle(fish) do
+    create_spawn_cycle(fish, Enum.map(0..8, &{&1, 0}) |> Enum.into(%{}))
   end
 
   defp create_spawn_cycle([], acc), do: acc
 
   defp create_spawn_cycle([fish | rest], acc) do
-    create_spawn_cycle(rest, Map.update(acc, fish - 8, 1, &(&1 + 1)))
+    create_spawn_cycle(rest, Map.update(acc, fish, 1, &(&1 + 1)))
   end
 
-  defp recurse_through_days(map, []), do: map
+  defp recurse_through_days(map, 0), do: map
 
-  defp recurse_through_days(map, [day | rest]) do
-    first = Map.get(map, day, 0)
-
+  defp recurse_through_days(map, day) do
     map =
-      if first > 0 do
-        Enum.take_while(1..37, fn x -> day + 2 + x * 7 <= 256 end)
-        |> Enum.map(fn
-          1 -> day + 9
-          x -> day + 2 + x * 7
-        end)
-        |> Enum.reduce(map, fn x, acc ->
-          Map.update(acc, x, first, &(&1 + first))
-        end)
-      else
-        map
-      end
+      Enum.reduce(map, %{}, fn {k, v}, acc ->
+        case k do
+          0 -> acc |> Map.update(6, v, &(&1 + v)) |> Map.update(8, v, &(&1 + v))
+          _ -> Map.update(acc, k - 1, v, &(&1 + v))
+        end
+      end)
 
-    recurse_through_days(map, rest)
+    recurse_through_days(map, day - 1)
   end
 end
