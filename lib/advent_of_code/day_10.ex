@@ -1,8 +1,4 @@
 defmodule AdventOfCode.Day10 do
-  # a = "("
-  # b = "["
-  # c = "{"
-  # d = "<"
   def part1(input) do
     input
     |> String.split("\n", trim: true)
@@ -86,8 +82,4 @@ defmodule AdventOfCode.Day10 do
   def calculate_prize([:b | next], acc), do: calculate_prize(next, acc * 5 + 2)
   def calculate_prize([:c | next], acc), do: calculate_prize(next, acc * 5 + 3)
   def calculate_prize([:d | next], acc), do: calculate_prize(next, acc * 5 + 4)
-  # ): 1 point.
-  # ]: 2 points.
-  # }: 3 points.
-  # >: 4 points.
 end
