@@ -90,6 +90,5 @@ defmodule AdventOfCode.Day13 do
       |> Enum.join("")
     end)
     |> Enum.join("\n")
-    |> IO.puts()
   end
 end

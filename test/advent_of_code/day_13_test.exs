@@ -61,7 +61,6 @@ defmodule AdventOfCode.Day13Test do
     """
 
     result = part2(input)
-    IO.inspect(result)
     assert result
   end
 end
