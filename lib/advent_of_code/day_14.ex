@@ -24,7 +24,7 @@ defmodule AdventOfCode.Day14 do
   def iterate([_ | []], _maps, 0, acc), do: acc
 
   def iterate([_ | []], maps, n, acc) do
-    IO.puts("done with #{n}")
+    # IO.puts("done with #{n}")
 
     acc
     |> Enum.reverse()
