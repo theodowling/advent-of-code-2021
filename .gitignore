@@ -27,3 +27,4 @@ advent_of_code_2018-*.tar
 
 .envrc
 .elixir_ls
+.DS_Store
