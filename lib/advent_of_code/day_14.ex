@@ -4,41 +4,23 @@ defmodule AdventOfCode.Day14 do
       input
       |> String.split("\n", trim: true)
 
-    start = String.codepoints(start)
+    start = start |> String.to_charlist() |> Enum.chunk_every(2, 1, [0])
 
-    maps =
-      Enum.map(maps, fn map ->
-        [a, b] = String.split(map, " -> ", trim: true)
-        {a, b}
+    maps = Map.new(maps, fn <<i1, i2, " -> ", o>> -> {[i1, i2], o} end)
+
+    result =
+      Enum.reduce(1..10, start, fn _, polymer ->
+        Enum.flat_map(polymer, fn [i1, i2] = pair ->
+          case maps do
+            %{^pair => o} -> [[i1, o], [o, i2]]
+            %{} -> [pair]
+          end
+        end)
       end)
-      |> Enum.into(%{})
+      |> Enum.map(&hd/1)
 
-    {{_, min}, {_, max}} =
-      iterate(start, maps, 9, [])
-      |> Enum.frequencies()
-      |> Enum.min_max_by(fn {_, v} -> v end)
-
+    {{_, min}, {_, max}} = result |> Enum.frequencies() |> Enum.min_max_by(&elem(&1, 1))
     max - min
-  end
-
-  def iterate([_ | []], _maps, 0, acc), do: acc
-
-  def iterate([_ | []], maps, n, acc) do
-    # IO.puts("done with #{n}")
-
-    acc
-    |> Enum.reverse()
-    |> iterate(maps, n - 1, [])
-  end
-
-  def iterate([a, b | rest], maps, n, []) do
-    outcome = maps[a <> b]
-    iterate([b | rest], maps, n, [b, outcome, a])
-  end
-
-  def iterate([a, b | rest], maps, n, acc) do
-    outcome = maps[a <> b]
-    iterate([b | rest], maps, n, [b, outcome | acc])
   end
 
   def part2(input) do
@@ -46,21 +28,28 @@ defmodule AdventOfCode.Day14 do
       input
       |> String.split("\n", trim: true)
 
-    start = String.codepoints(start)
-    # IO.inspect(Enum.frequencies(start))
+    start = start |> String.to_charlist() |> Enum.chunk_every(2, 1, [0]) |> Enum.frequencies()
 
-    maps =
-      Enum.map(maps, fn map ->
-        [a, b] = String.split(map, " -> ", trim: true)
-        {a, b}
+    maps = Map.new(maps, fn <<i1, i2, " -> ", o>> -> {[i1, i2], o} end)
+
+    {{_, mins}, {_, maxes}} =
+      1..40
+      |> Enum.reduce(start, fn _, polymer ->
+        Enum.reduce(polymer, %{}, fn {[i1, i2] = pair, count}, acc ->
+          case maps do
+            %{^pair => o} ->
+              acc
+              |> Map.update([i1, o], count, &(&1 + count))
+              |> Map.update([o, i2], count, &(&1 + count))
+
+            %{} ->
+              Map.put(acc, pair, count)
+          end
+        end)
       end)
-      |> Enum.into(%{})
+      |> Enum.group_by(&hd(elem(&1, 0)), &elem(&1, 1))
+      |> Enum.min_max_by(fn {_, counts} -> Enum.sum(counts) end)
 
-    {{_, min}, {_, max}} =
-      iterate(start, maps, 39, [])
-      |> Enum.frequencies()
-      |> Enum.min_max_by(fn {_, v} -> v end)
-
-    max - min
+    Enum.sum(maxes) - Enum.sum(mins)
   end
 end

@@ -6,7 +6,7 @@ defmodule AdventOfCode.Day16Test do
   @tag :skip
   test "part1" do
     input = "D2FE28"
-    # assert parse_input(input) == [%{number: 2021, type: :literal, version: 6}]
+    assert parse_input(input) == [%{number: 2021, type: :literal, version: 6}]
 
     assert parse_input("38006F45291200") == [
              %{
